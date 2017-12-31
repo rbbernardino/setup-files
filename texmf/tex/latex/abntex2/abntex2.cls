@@ -1026,9 +1026,14 @@
 
 % ---
 % Impressão da Capa
+\makeatletter
 \newcommand{\imprimircapa}{%
   \begin{capa}%
     \center
+
+    {\abntex@ifnotempty{\imprimirinstituicao}{\imprimirinstituicao\vspace*{\fill}}}
+
+    %\vspace*{1cm}
     \ABNTEXchapterfont\large\imprimirautor
 
     \vfill
@@ -1036,7 +1041,9 @@
     \ABNTEXchapterfont\bfseries\LARGE\imprimirtitulo
     \end{center}
     \vfill
-    
+
+    \vspace*{5cm}
+
     \large\imprimirlocal
 
     \large\imprimirdata
@@ -1044,6 +1051,7 @@
     \vspace*{1cm}
   \end{capa}
 }
+\makeatother
 % ---
 
 
@@ -1061,10 +1069,6 @@
 \makeatletter
 \newcommand{\folhaderostocontent}{
   \begin{center}
-
-    {\abntex@ifnotempty{\imprimirinstituicao}{\imprimirinstituicao\vspace*{\fill}}}
-
-    \vspace*{1cm}
     {\ABNTEXchapterfont\large\imprimirautor}
 	
     \vspace*{\fill}\vspace*{\fill}

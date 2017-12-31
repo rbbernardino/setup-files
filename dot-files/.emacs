@@ -70,7 +70,7 @@
 
 ;; configura visual-regexp-steroids para buscar com regexp do python
 (require 'visual-regexp-steroids)
-(define-key global-map (kbd "S-<f10>") 'vr/replace)
+(define-key global-map (kbd "<f10>") 'vr/replace)
 (define-key global-map (kbd "C-S-<f10>") 'vr/query-replace)
 ;; if you use multiple-cursors, this is for you:
 (define-key global-map (kbd "C-c m") 'vr/mc-mark)
@@ -171,7 +171,7 @@
 ;;(global-set-key [f8] 'whitespace-toggle-options)
 (global-set-key [f2] 'ispell-word)
 (global-set-key [f9] 'goto-line)
-(global-set-key [f10] 'replace-string)
+;; (global-set-key [f10] 'replace-string)
 ;; (global-set-key (kbd "S-<f10>") 'replace-regexp) ; replaced with visual-regexp
 (global-set-key [f12] 'sr-speedbar-toggle)
 
@@ -572,26 +572,19 @@ That is, a string used to represent it on the tab bar."
 (require 'epa-file)
 (epa-file-enable)
 
-;; -----------------------------------------------------------------------------
-;;          LATEX
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;;;;;;;;;;;;;;;;        LaTeX         ;;;;;;;;;;;;;;;;;
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; hooks para flyspell
-(add-hook `latex-mode-hook `flyspell-mode)
 (add-hook `LaTeX-mode-hook `flyspell-mode)
-(add-hook `tex-mode-hook `flyspell-mode)
-(add-hook `bibtex-mode-hook `flyspell-mode)
-
-;; hooks para company mode
-(add-hook `latex-mode-hook `global-company-mode)
 (add-hook `LaTeX-mode-hook `global-company-mode)
-(add-hook `tex-mode-hook `global-company-mode)
-(add-hook `bibtex-mode-hook `global-company-mode)
-
-;; hook para yas snippets
-(add-hook `latex-mode-hook `yas-minor-mode)
 (add-hook `LaTeX-mode-hook `yas-minor-mode)
-(add-hook `tex-mode-hook `yas-minor-mode)
-(add-hook `bibtex-mode-hook `yas-minor-mode)
+(add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+
+;; command to open file at point
+(add-hook 'LaTeX-mode-hook
+		  'local-set-key (kbd "M-.") 'find-file-at-point)
 
 ;;------------------------------------------------
 ;; CORRIGE BUG do includegraphics...
@@ -708,13 +701,33 @@ That is, a string used to represent it on the tab bar."
 ;; ativa gerar pdf ao compilar
 (setq TeX-PDF-mode t)
 
-;; corrige visualizador de PDF para okular
+;; Acrescenta "build/" na frente do nome do arquivo para abrir output do
+;; pdflatex na pasta correta (lembrando config do latexmk!)
 (defun okular-view-LaTeX-mode()
-  (add-to-list 'TeX-view-program-list '("Okular" "okular %o -p %(outpage)"))
-  (setq TeX-view-program-selection '((output-pdf "Okular")))
-  ; Other mode specific config
-  )
+  ;; (add-to-list 'TeX-view-program-list '("Okular" "okular %o -p %(outpage)"))
+  (add-to-list 'TeX-view-program-list
+			   '("Okular" ("okular --unique build/%o" (mode-io-correlate "#src:%n%a"))))
+  (setq TeX-view-program-selection '((output-pdf "Okular"))))
 (add-hook 'LaTeX-mode-hook 'okular-view-LaTeX-mode)
+
+;; Forma mais simples de configurar o Okular, mas sem setar a opção...
+;; talvez eu devesse adaptar a anterior a essa...
+;; (eval-after-load "tex"
+;;   '(setcar (cdr (assoc 'output-pdf TeX-view-program-selection)) "Okular"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Usar synctex com Okular 
+;; ##### No Okular:
+;; #####   "Configuration/Configure Okular/Editor" => Editor => Emacsclient
+;;
+;; Atalhos:
+;; ##### Okular: Shift + Left click
+;; ##### Emacs: C-c C-c View
+(setq TeX-source-correlate-mode t
+      TeX-source-correlate-start-server t)
+
+;; evitar perder foco da janela ao abrir resultado do PDF
+(setq TeX-view-evince-keep-focus t)
 
 ;; para transformar símbolos em imagens já na edição
 (require 'latex-pretty-symbols)
@@ -723,8 +736,7 @@ That is, a string used to represent it on the tab bar."
 (setq TeX-auto-save t)
 (setq TeX-parse-self t)
 
-;; sempre que abrir um novo .tex vai perguntar qual é o arquivo principal
-;; para compilar
+;; sempre pedir arquivo principal para compilar criar um .tex
 (setq-default TeX-master nil)
 
 ;; adiciona line breaks no final apenas visualmente (não altera buffer)
