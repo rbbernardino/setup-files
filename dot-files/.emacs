@@ -306,6 +306,9 @@
 (add-hook 'after-init-hook 'global-company-mode)
 (global-set-key (kbd "C-x y") 'company-yasnippet)
 
+;; display quick help
+(define-key company-active-map (kbd "M-h") 'company-show-doc-buffer)
+
 ;; configurar melhor depois para aceitar letras minúsculas
 (setq company-show-numbers          t
 	  ;; company-dabbrev-downcase      "case-replace"
@@ -368,6 +371,10 @@
 ;;-----------------------------------------------
 ;; R with ESS
 (add-hook 'ess-r-mode-hook 'electric-pair-mode)
+(setq ess-use-company 'script-only)
+(setq ess-use-flymake nil)
+(add-hook 'ess-r-mode-hook 'flycheck-mode)
+(setq flycheck-lintr-linters "with_defaults(commented_code_linter=NULL,absolute_paths_linter=NULL,infix_spaces_linter=NULL,spaces_left_parentheses_linter=NULL,line_length_linter=NULL,snake_case_linter=NULL,camel_case_linter=NULL)")
 
 ;;-----------------------------------------------
 ;;     C/C++ mode configs minor-modes hooks    ;;
