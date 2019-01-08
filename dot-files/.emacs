@@ -21,11 +21,21 @@
 (paradox-enable)
 (setq paradox-github-token "382b9625cd4ab78e5b7bd6e92514fe571d79d45f")
 
+;; para destacar trechos de código com focus-mode
+;; (require 'focus)
+
 ;; para lidar com dead keys com o ibus ativado...
 (require 'iso-transl)
 
 ;; desktop+ para melhor controle do desktop
 (require 'desktop+)
+(setq desktop-restore-forces-onscreen nil) ;; não estava funcionando sem isso
+
+;; Show FIXME/TODO/BUG/KLUDGE in special face only in comments and strings
+;; not working for some reason...
+(require 'fic-mode)
+(add-hook 'c++-mode-hook 'fic-mode)
+(add-hook 'emacs-lisp-mode-hook 'fic-mode)
 
 ;; transformar parágrafos em uma só linha
 ;; provides: unfill-paragraph, unfill-region, unfill-toggle
@@ -43,8 +53,12 @@
  scroll-down-aggressively 0.01)
 ;; (setq-default scroll-step 1)
 
-(setq linum-format "%d ")
-(global-linum-mode 1)
+;; displays line numbers 'line-number-mode'
+(global-display-line-numbers-mode t)
+
+;; linum-mode setup (deprecated)
+;; (setq linum-format "%d ")
+;; (global-linum-mode 1)
 ;; (size-indication-mode 1)
 
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
@@ -79,6 +93,11 @@
 (define-key esc-map (kbd "C-s") 'vr/isearch-forward) ;; C-M-s
 
 ;;------------------------------------------------------------------------------
+;; some json setup
+;; prevent creation of temporary .# files
+(add-hook 'json-mode-hook (lambda() (setq-local create-lockfiles nil)))
+
+;;------------------------------------------------------------------------------
 ;; Configurar TAB
 
 ;; melhorar word forward/backward naviagtion
@@ -100,8 +119,9 @@
   )
 
 ;(add-hook 'erlang-mode-hook 'setar-identacao-tab)
-(add-hook 'fundamental-mode-hook 'setar-identacao-tab)
-(add-hook 'markdown-mode-hook 'setar-identacao-tab)
+(add-hook 'fundamental-mode-hook 'ident-with-spaces)
+(add-hook 'markdown-mode-hook 'ident-with-spaces)
+(add-hook 'ess-r-mode-hook 'ident-with-spaces)
 (add-hook 'c++-mode 'ident-with-spaces())
 
 ;; largura do TAB
@@ -143,10 +163,13 @@
 (add-to-list 'load-path "~/.emacs.d/git-emacs")
 (require 'git-emacs)
 
+;; mostra status no fringe, não suportado no tty (terminal)
+(require 'git-gutter-fringe)
+
 (global-git-gutter-mode +1)
 
 ;; para usar conjuntamente com linum-mode
-(git-gutter:linum-setup)
+;; (git-gutter:linum-setup)
 
 ;; não sei o que faz
 (global-set-key (kbd "C-x C-g") 'git-gutter)
@@ -219,8 +242,14 @@
 (global-set-key (kbd "C-x <up>") 'windmove-up)
 
 ;; Salvar e recuperar desktop
-(global-set-key (kbd "C-c d r") 'desktop-read)
-(global-set-key (kbd "C-c d s") 'desktop-save)
+;; (global-set-key (kbd "C-c d r") 'desktop-read)
+;; (global-set-key (kbd "C-c d s") 'desktop-save)
+;; com pacote desktop+
+(global-set-key (kbd "C-c d s") 'desktop+-create)
+(global-set-key (kbd "C-c d r") 'desktop+-load)
+
+;; find file
+(global-set-key (kbd "M-S-.") 'find-file-at-point)
 
 (line-number-mode 1)
 (column-number-mode 1)
@@ -279,7 +308,7 @@
 
 ;; configurar melhor depois para aceitar letras minúsculas
 (setq company-show-numbers          t
-	  ;; company-dabbrev-downcase      nil
+	  ;; company-dabbrev-downcase      "case-replace"
 	  ;;company-idle-delay            0
 	  ;; company-minimum-prefix-length		2
 	  )
@@ -337,16 +366,26 @@
 ;;             (add-hook 'before-save-hook 'meghanada-code-beautify-before-save)))
 
 ;;-----------------------------------------------
+;; R with ESS
+(add-hook 'ess-r-mode-hook 'electric-pair-mode)
+
+;;-----------------------------------------------
 ;;     C/C++ mode configs minor-modes hooks    ;;
 
 ;; snippets (ajustar compatibilidade com company
 ;(add-hook 'c-mode-hook 'yas-global-mode)
 ;(add-hook 'c++-mode-hook 'yas-global-mode)
 
-;; sempre c++11
+;; linux kernel identation style
+(setq c-default-style "linux"
+	  c-basic-offset 4)
+
+;; sempre c++17
 (add-hook 'c++-mode-hook
 		  (lambda()	(setq
-			 irony-additional-clang-options '("-std=c++11"))))
+					 irony-additional-clang-options '("-std=c++17"))
+			(global-set-key (kbd "C-c C-c") 'compile)
+))
 
 ;; auto complete
 (add-hook 'c++-mode-hook 'irony-mode)
@@ -356,15 +395,18 @@
 ;; flycheck para checar a sintaxe
 (add-hook 'c++-mode-hook 'flycheck-mode)
 
+;; flyspell nos comments apenas para checar spelling
+(add-hook 'c++-mode-hook 'flyspell-prog-mode)
+
 ; Disable clang check, gcc check works better
 ;; (flycheck-disable-checker
 ;; (setq-default flycheck-disabled-checkers
 ;; 	      '(append flycheck-disabled-checkers
 ;; 		      "c/c++-clang"))
 
-; Enable C++11 support for gcc
+; Enable C++17 support for gcc
 ;; (add-hook 'c++-mode-hook
-;; 		  (lambda () (setq flycheck-gcc-language-standard "c++11")))
+;; 		  (lambda () (setq flycheck-gcc-language-standard "c++17")))
 
 (add-hook 'c-mode-hook 'flycheck-mode)
 (add-hook 'objc-mode-hook 'flycheck-mode)
@@ -468,31 +510,24 @@
 (define-key elpy-mode-map (kbd "<M-down>") nil)
 
 ;; to use IPython instead of usual python
-(elpy-use-ipython "ipython3")
-
-;; consider adding --pylab, import several things and allow inline graphs
-;; linux colors to provide better reading with dark emacs
-(setq python-shell-interpreter-args "--colors Linux")
+;;      NOTE: --pylab        - import several things and allow inline graphs
+;;            --colors Linux - provide better reading with dark emacs
+(setq python-shell-interpreter "ipython"
+      python-shell-interpreter-args "-i --simple-prompt --colors Linux --pylab")
 
 ;; for virtual environments
 (defalias 'workon 'pyvenv-workon)
 
-;; if you want to use the latest version (5+)
-;; (setq python-shell-interpreter-args "--colors Linux --simple-prompt -i")
-
 ;; use jedi backend
-;; (setq elpy-rpc-backend "jedi")
+(setq elpy-rpc-backend "jedi")
 
-;; (eval-after-load 'company
-;; 		  '(add-to-list 'company-backends 'company-jedi))
-
-;; to avoid flood in mode line (Python Elpy yas AC ElDoc Fill)
-;; (elpy-clean-modeline)
+(eval-after-load 'company
+		  '(add-to-list 'company-backends 'company-jedi))
 
 ;; disable flymake so it may use flycheck instead
-(when (require 'flycheck nil t)
-  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-  (add-hook 'elpy-mode-hook 'flycheck-mode))
+;; (when (require 'flycheck nil t)
+;;  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+;;  (add-hook 'elpy-mode-hook 'flycheck-mode))
 
 ;; -----------------------------------------------------------------------------
 ;;            tabbar-mode com Tweaks
@@ -643,9 +678,6 @@ That is, a string used to represent it on the tab bar."
 ;;     Para uso de labels, refs, etc. melhorado
 (require 'reftex)
 (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
-(add-hook 'latex-mode-hook 'turn-on-reftex)
-(add-hook 'tex-mode-hook 'turn-on-reftex)
-(add-hook 'bibtex-mode-hook 'turn-on-reftex)
 (setq reftex-use-external-file-finders t)
 (setq reftex-external-file-finders
 	  '(("tex" . "kpsewhich -format=.tex %f")
@@ -655,15 +687,17 @@ That is, a string used to represent it on the tab bar."
 (global-set-key (kbd "C-c 0") 'reftex-reference)
 
 ;; estilo de citação ABNTEX
-(eval-after-load 'reftex-vars
-  '(progn
-     ;; (also some other reftex-related customizations)
-     (setq reftex-cite-format
-           '((?\C-m . "\\cite[]{%l}")
-             (?t . "\\citeonline[]{%l}")
-             (?y . "\\citeyear[]{%l}")
-             (?a . "\\citeauthoronline[]{%l}")
-             ))))
+(defun my-LaTeX-reftex-format ()
+  (setq reftex-cite-format
+		'((?\C-m . "\\cite[]{%l}")
+		  (?t . "\\citeonline[]{%l}")
+		  (?y . "\\citeyear[]{%l}")
+		  (?a . "\\citeauthoronline[]{%l}")
+		  (?f . "\\citeauthoronline{%l}, \\citeyear{%l}~\\cite{%l}")
+		  ))
+  )
+(add-hook 'LaTeX-mode-hook 'my-LaTeX-reftex-format)
+
 
 ;; find bibfile of current visiting document
 ;; (won't work if .tex file has same name as .bib file)
@@ -689,6 +723,9 @@ That is, a string used to represent it on the tab bar."
       (setq bib (concat bib ".bib")))
     (mg-TeX-kpsewhich-find-file bib)))))
 
+;; faz com que os buffers dos .bib atualizem automaticamente
+(add-hook 'bibtex-mode-hook 'auto-revert-mode)
+
 ;; compila com latexmk, sem necessitar rodar várias vezes o C-c C-c
 (require 'auctex-latexmk)
 (auctex-latexmk-setup)
@@ -696,7 +733,7 @@ That is, a string used to represent it on the tab bar."
 (add-hook 'LaTeX-mode-hook '(lambda () (setq TeX-command-default "LatexMk")))
 
 ;; faz com que C-c C-c sempre escolha LaTexMk
-;; (setq TeX-command-force "LaTexMk")
+(setq TeX-command-force "LaTexMk")
 
 ;; ativa gerar pdf ao compilar
 (setq TeX-PDF-mode t)
@@ -766,6 +803,11 @@ That is, a string used to represent it on the tab bar."
 	  )
     (set-marker to-marker nil)))
 (ad-activate 'LaTeX-fill-region-as-paragraph)
+
+;; latexdiff
+(require 'latexdiff)
+(define-key LaTeX-mode-map (kbd "C-c l d") 'latexdiff)
+(define-key LaTeX-mode-map (kbd "C-c l v") 'latexdiff-vc)
 
 ;; snippets úteis
 ;; (add-hook 'LaTeX-mode-hook
