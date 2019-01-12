@@ -129,7 +129,37 @@
    (quote
     ("65533f61159a00d88537d301747d4134116532c44cea994e5ba5f04bbfe5405c" default)))
  '(elpy-rpc-backend nil t)
+ '(ess-R-font-lock-keywords
+   (quote
+    ((ess-R-fl-keyword:keywords . t)
+     (ess-R-fl-keyword:constants . t)
+     (ess-R-fl-keyword:modifiers . t)
+     (ess-R-fl-keyword:fun-defs . t)
+     (ess-R-fl-keyword:assign-ops . t)
+     (ess-R-fl-keyword:%op% . t)
+     (ess-fl-keyword:fun-calls . t)
+     (ess-fl-keyword:numbers . t)
+     (ess-fl-keyword:operators)
+     (ess-fl-keyword:delimiters)
+     (ess-fl-keyword:= . t)
+     (ess-R-fl-keyword:F&T . t))))
  '(fill-column 80)
+ '(inferior-ess-r-font-lock-keywords
+   (quote
+    ((ess-S-fl-keyword:prompt . t)
+     (ess-R-fl-keyword:keywords . t)
+     (ess-R-fl-keyword:constants . t)
+     (ess-R-fl-keyword:modifiers . t)
+     (ess-R-fl-keyword:messages . t)
+     (ess-R-fl-keyword:fun-defs . t)
+     (ess-R-fl-keyword:assign-ops . t)
+     (ess-fl-keyword:matrix-labels . t)
+     (ess-fl-keyword:fun-calls . t)
+     (ess-fl-keyword:numbers . t)
+     (ess-fl-keyword:operators)
+     (ess-fl-keyword:delimiters)
+     (ess-fl-keyword:= . t)
+     (ess-R-fl-keyword:F&T . t))))
  '(inhibit-startup-screen t)
  '(ispell-personal-dictionary nil)
  '(package-selected-packages

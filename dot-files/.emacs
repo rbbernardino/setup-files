@@ -373,8 +373,26 @@
 (add-hook 'ess-r-mode-hook 'electric-pair-mode)
 (setq ess-use-company 'script-only)
 (setq ess-use-flymake nil)
-(add-hook 'ess-r-mode-hook 'flycheck-mode)
-(setq flycheck-lintr-linters "with_defaults(commented_code_linter=NULL,absolute_paths_linter=NULL,infix_spaces_linter=NULL,spaces_left_parentheses_linter=NULL,line_length_linter=NULL,snake_case_linter=NULL,camel_case_linter=NULL)")
+;; (add-hook 'ess-r-mode-hook 'flycheck-mode)
+;; (setq flycheck-lintr-linters "with_defaults(commented_code_linter=NULL,absolute_paths_linter=NULL,infix_spaces_linter=NULL,spaces_left_parentheses_linter=NULL,line_length_linter=NULL,snake_case_linter=NULL,camel_case_linter=NULL)")
+
+;; some extra syntax highlighting
+(add-hook 'ess-mode-hook
+	  '(lambda()
+             (font-lock-add-keywords
+              nil
+              '(
+		;; highlight named arguments -- this was found on an earlier mailing list post
+		("\\([(,]\\|[\n[:blank:]]*\\)\\([.A-Za-z][._A-Za-z0-9]*\\)[\n[:blank:]]*=[^=]"
+		 2 font-lock-variable-name-face)
+
+		;; highlight packages called through ::, :::
+		("\\(\\w+\\):\\{2,3\\}" 1 font-lock-variable-name-face)
+
+		;; highlight S4 methods
+		("\\(setMethod\\|setGeneric\\|setGroupGeneric\\|setClass\\|setRefClass\\|setReplaceMethod\\)" 1 font-lock-variable-name-face)
+		))
+             ))
 
 ;;-----------------------------------------------
 ;;     C/C++ mode configs minor-modes hooks    ;;
@@ -933,6 +951,7 @@ That is, a string used to represent it on the tab bar."
 
 ;; seta o Control + Z para ser o desfazer
 (global-set-key (kbd "C-z") 'undo-only)
+(global-set-key (kbd "C-S-z") 'undo)
 
 ;; Setando o Home / End - não funciona no terminal =(
 (global-set-key [C-home] 'beginning-of-buffer)
