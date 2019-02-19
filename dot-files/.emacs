@@ -12,6 +12,20 @@
 
 (package-initialize)
 
+;; dired extra tools, use <C-x d> to invoke dired to load this
+(add-hook 'dired-load-hook
+          (lambda ()
+            (load "dired-x")
+            ;; Set dired-x global variables here.  For example:
+            ;; (setq dired-guess-shell-gnutar "gtar")
+            ;; (setq dired-x-hands-off-my-keys nil)
+            ))
+(add-hook 'dired-mode-hook
+          (lambda ()
+            ;; Set dired-x buffer-local variables here.  For example:
+            ;; (dired-omit-mode 1)
+            ))
+
 ;; contagem de palavras e caracteres
 (require 'wc-mode)
 (setq wc-modeline-format "WC[%tc chars | %tw words]")
@@ -30,12 +44,6 @@
 ;; desktop+ para melhor controle do desktop
 (require 'desktop+)
 (setq desktop-restore-forces-onscreen nil) ;; não estava funcionando sem isso
-
-;; Show FIXME/TODO/BUG/KLUDGE in special face only in comments and strings
-;; not working for some reason...
-(require 'fic-mode)
-(add-hook 'c++-mode-hook 'fic-mode)
-(add-hook 'emacs-lisp-mode-hook 'fic-mode)
 
 ;; transformar parágrafos em uma só linha
 ;; provides: unfill-paragraph, unfill-region, unfill-toggle
@@ -56,12 +64,20 @@
 ;; displays line numbers 'line-number-mode'
 (global-display-line-numbers-mode t)
 
+;; remove top menu bar
+(menu-bar-mode -1)
+
 ;; linum-mode setup (deprecated)
 ;; (setq linum-format "%d ")
 ;; (global-linum-mode 1)
 ;; (size-indication-mode 1)
 
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
+
+;;--------------------------------------------------------------------------
+;; HELM
+
+;;--------------------------------------------------------------------------
 
 ;; faz que ao colar ou digitar em região selecionada substitua o que tinha antes
 (delete-selection-mode 1)
@@ -121,7 +137,7 @@
 ;(add-hook 'erlang-mode-hook 'setar-identacao-tab)
 (add-hook 'fundamental-mode-hook 'ident-with-spaces)
 (add-hook 'markdown-mode-hook 'ident-with-spaces)
-(add-hook 'ess-r-mode-hook 'ident-with-spaces)
+;; (add-hook 'ess-r-mode-hook 'ident-with-spaces)
 (add-hook 'c++-mode 'ident-with-spaces())
 
 ;; largura do TAB
@@ -371,6 +387,8 @@
 ;;-----------------------------------------------
 ;; R with ESS
 (add-hook 'ess-r-mode-hook 'electric-pair-mode)
+(setq ess-indent-with-fancy-comments nil) ; prevent # weird identation
+(setq ess-default-style 'RStudio)
 (setq ess-use-company 'script-only)
 (setq ess-use-flymake nil)
 ;; (add-hook 'ess-r-mode-hook 'flycheck-mode)
@@ -400,6 +418,14 @@
 ;; snippets (ajustar compatibilidade com company
 ;(add-hook 'c-mode-hook 'yas-global-mode)
 ;(add-hook 'c++-mode-hook 'yas-global-mode)
+
+;; cmake-ide
+;; (require 'rtags)
+; paths found with
+;     gcc -v -xc++ /dev/null -fsyntax-only
+;; (setq cmake-ide-flags-c++ '("-I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include"))
+;; (setq cmake-ide-flags-c '("-I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include"))
+;; (cmake-ide-setup)
 
 ;; linux kernel identation style
 (setq c-default-style "linux"
@@ -455,23 +481,7 @@
 (add-hook 'irony-mode-hook 'my-irony-mode-hook)
 (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
 
-;; ---------------------------------------------
-;; !!!!!!!!  TENTAR DEPOIS usar SEMANTIC  !!!!!!!
-;;
-;; (add-to-list 'company-backends 'company-c-headers)
-;; (add-to-list 'company-backends 'company-semantic)
-;; (add-to-list 'company-c-headers-path-system "/usr/include/c++/5.4.0/")
-;; (require 'cc-mode)
-;; (require 'semantic)
-;; (global-semanticdb-minor-mode 1)
-;; (global-semantic-idle-scheduler-mode 1)
-;; (semantic-mode 1)
-;; (semantic-add-system-include "/usr/include/c++/5.4.0/" 'c++-mode)
-;; (semantic-add-system-include "~/linux/kernel")
-;; (semantic-add-system-include "~/linux/include")
-
-;;-------------------------------------------
-;;      DEBUGGER
+;; DEBUGGER
 (setq
  ;; use gdb-many-windows by default
  gdb-many-windows t
@@ -480,11 +490,8 @@
  gdb-show-main t
  )
 
-;;-------------------------------------------
-
 ;(add-hook 'c-mode-hook 'whitespace-mode)
 
-;;-----------------------------------------------
 ;; Navegar pelo código para c, c++ e java
 (require 'ggtags)
 (add-hook 'c-mode-common-hook
@@ -994,6 +1001,13 @@ That is, a string used to represent it on the tab bar."
 (global-hl-line-mode 1)
 ;; (toggle-hl-line-when-idle 1) ; Highlight only when idle
 ;; (hl-line-when-idle-interval 2)
+
+;;------------------------------------------------------------------------------
+;; Show FIXME/TODO/BUG/KLUDGE in special face only in comments and strings
+;; must put at the end of the .emacs for some reason...
+(require 'fic-mode)
+(add-hook 'c++-mode-hook 'fic-mode)
+(add-hook 'emacs-lisp-mode-hook 'fic-mode)
 
 ;; -----------------------------------------------------------------------------
 ;; Centralizar arquivos temporários

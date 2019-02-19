@@ -143,6 +143,7 @@
      (ess-fl-keyword:delimiters)
      (ess-fl-keyword:= . t)
      (ess-R-fl-keyword:F&T . t))))
+ '(fci-rule-color "#383838")
  '(fill-column 80)
  '(inferior-ess-r-font-lock-keywords
    (quote
@@ -162,10 +163,14 @@
      (ess-R-fl-keyword:F&T . t))))
  '(inhibit-startup-screen t)
  '(ispell-personal-dictionary nil)
+ '(nrepl-message-colors
+   (quote
+    ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
  '(package-selected-packages
    (quote
-    (ess-view ess-smart-underscore ess fic-mode powershell focus sed-mode see-mode fzf wc-mode visual-regexp-steroids visual-fill-column unfill sr-speedbar pythonic python-mode paradox multiple-cursors modeline-posn meghanada matlab-mode markdown-preview-mode markdown-preview-eww latexdiff latex-pretty-symbols json-mode hl-line+ google-translate google-this git-gutter-fringe gh-md ggtags flymd flycheck-irony erlang elpy ein desktop+ company-shell company-jedi company-irony-c-headers company-irony company-flx company-distel company-c-headers company-auctex bash-completion auctex-latexmk)))
+    (auto-complete-clang cmake-mode rtags cmake-ide ess-view ess-smart-underscore ess fic-mode powershell focus sed-mode see-mode fzf wc-mode visual-regexp-steroids visual-fill-column unfill sr-speedbar pythonic python-mode paradox multiple-cursors modeline-posn meghanada matlab-mode markdown-preview-mode markdown-preview-eww latexdiff latex-pretty-symbols json-mode hl-line+ google-translate google-this git-gutter-fringe gh-md ggtags flymd flycheck-irony erlang elpy ein desktop+ company-shell company-jedi company-irony-c-headers company-irony company-flx company-distel company-c-headers company-auctex bash-completion auctex-latexmk)))
  '(paradox-automatically-star t)
+ '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
  '(reftex-cite-format
    (quote
     ((13 . "\\cite[]{%l}")
@@ -175,6 +180,28 @@
  '(reftex-plug-into-AUCTeX t)
  '(tabbar-separator (quote (0.3)))
  '(tool-bar-mode nil)
+ '(vc-annotate-background "#2B2B2B")
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#BC8383")
+     (40 . "#CC9393")
+     (60 . "#DFAF8F")
+     (80 . "#D0BF8F")
+     (100 . "#E0CF9F")
+     (120 . "#F0DFAF")
+     (140 . "#5F7F5F")
+     (160 . "#7F9F7F")
+     (180 . "#8FB28F")
+     (200 . "#9FC59F")
+     (220 . "#AFD8AF")
+     (240 . "#BFEBBF")
+     (260 . "#93E0E3")
+     (280 . "#6CA0A3")
+     (300 . "#7CB8BB")
+     (320 . "#8CD0D3")
+     (340 . "#94BFF3")
+     (360 . "#DC8CC3"))))
+ '(vc-annotate-very-old-color "#DC8CC3")
  '(whitespace-style
    (quote
     (face space-before-tab empty space-after-tab indentation face lines trailing))))
@@ -184,7 +211,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(hl-line ((t (:background "#522514" :weight bold))))
  '(line-number-current-line ((t (:inherit line-number :foreground "white smoke" :weight extra-bold))))
  '(region ((t (:background "dim gray"))))
  '(tabbar-button ((t (:background "#3F3F3F" :foreground "#DCDCCC" :box (:line-width 1 :color "grey20" :style released-button)))))
