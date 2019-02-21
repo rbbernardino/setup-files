@@ -175,7 +175,6 @@
 
 ;;-----------------------------------------------------
 ;;           GIT
-;;---------- +LENTO 0.2s
 (add-to-list 'load-path "~/.emacs.d/git-emacs")
 (require 'git-emacs)
 
@@ -300,11 +299,36 @@
 
 (global-set-key (kbd "C-S-d") 'delete-current-line)
 
-;; ----------- +LENTO 0.07s
+;;-----------------------------------------------------
+;;-----------------------------------------------------
+;; MOVE LINE UP/DOWN with Alt Gr+<up>/<down>
+;;-----------------------------------------------------
+(defmacro save-column (&rest body)
+  `(let ((column (current-column)))
+     (unwind-protect
+         (progn ,@body)
+       (move-to-column column))))
+(put 'save-column 'lisp-indent-function 0)
+;;
+(defun move-line-up ()
+  (interactive)
+  (save-column
+    (transpose-lines 1)
+    (forward-line -2)))
+;;
+(defun move-line-down ()
+  (interactive)
+  (save-column
+    (forward-line 1)
+    (transpose-lines 1)
+    (forward-line -1)))
+(global-set-key (kbd "C-{") 'move-line-up)
+(global-set-key (kbd "C-}") 'move-line-down)
+;;-----------------------------------------------------
+
 ;; salva histórico de comandos, inclusive arquivos abertos recentemente
 (savehist-mode 1)
 
-;; --------------- +LENTO 0.09s
 ;; menu de arquivos recentes (em lista)
 (require 'recentf)
 (recentf-mode 1)
@@ -316,7 +340,6 @@
 
 ;;-----------------------------------------------
 ;;     Company auto complete    ;;
-;; -------------- +LENTO 0.08s
 ;; auto complete
 (require 'company)
 (add-hook 'after-init-hook 'global-company-mode)
@@ -531,7 +554,6 @@
 ;; (setq python-shell-interpreter "ipython3"
 ;; 	  python-shell-interpreter-args "--simple-prompt -i")
 
-;; ---------- LENTO: 0.6s
 ;; elpy
 (elpy-enable)
 
