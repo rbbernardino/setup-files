@@ -76,9 +76,13 @@
 
 ;;--------------------------------------------------------------------------
 ;; HELM
+; (require 'helm-config)
+;; (global-set-key (kbd "M-i") 'helm-swoop)
+;; (global-set-key (kbd "C-x b") 'helm-buffers-list)
+;; (global-set-key (kbd "C-x r b") 'helm-bookmarks)
+;; (global-set-key (kbd "C-x m") 'helm-M-x)
 
 ;;--------------------------------------------------------------------------
-
 ;; faz que ao colar ou digitar em região selecionada substitua o que tinha antes
 (delete-selection-mode 1)
 
@@ -187,7 +191,6 @@
 ;; (git-gutter:linum-setup)
 
 ;; não sei o que faz
-(global-set-key (kbd "C-x C-g") 'git-gutter)
 (global-set-key (kbd "C-x v =") 'git-gutter:popup-hunk)
 
 ;; Jump to next/previous hunk
@@ -202,8 +205,11 @@
 
 ;; Mark current hunk
 (global-set-key (kbd "C-x v SPC") #'git-gutter:mark-hunk)
-;;-----------------------------------------------------
 
+;; Magit Status
+(global-set-key (kbd "C-x g") 'magit-status)
+
+;;-----------------------------------------------------
 ;; Global key bindings.
 (global-set-key (kbd "C-<f5>") 'compile)
 ;;(global-set-key [f8] 'whitespace-toggle-options)
@@ -288,7 +294,8 @@
            (list (region-beginning) (region-end))
          (list (line-beginning-position) (line-beginning-position 2)))))
 
-;; define função para deletar a linha atual e bind to C-S-d
+;;-----------------------------------------------------
+;; DELETE CURRENT LINE (switches with C-d)
 (defun delete-current-line ()
   "Delete (not kill) the current line."
   (interactive)
@@ -296,8 +303,8 @@
     (delete-region
      (progn (forward-visible-line 0) (point))
      (progn (forward-visible-line 1) (point)))))
-
-(global-set-key (kbd "C-S-d") 'delete-current-line)
+;; (global-set-key (kbd "C-S-d") 'delete-char)
+(global-set-key (kbd "C-M-d") 'delete-current-line)
 
 ;;-----------------------------------------------------
 ;;-----------------------------------------------------
@@ -363,11 +370,12 @@
 (global-set-key (kbd "C-<tab>") 'company-complete)
 (global-set-key (kbd "<C-iso-lefttab>") 'company-files)
 
-(setq
- company-irony-ignore-case t
- company-dabbrev-ignore-case t
- company-etags-ignore-case t
- ggtags-global-ignore-case t)
+;; (setq
+;;  company-irony-ignore-case t
+;;  company-dabbrev-ignore-case t
+;;  company-etags-ignore-case t
+;;  ggtags-global-ignore-case t)
+;; (setq completion-ignore-case t)
 
 ;;-----------------------------------------------
 ;;-----------------------------------------------
@@ -409,7 +417,8 @@
 
 ;;-----------------------------------------------
 ;; R with ESS
-(add-hook 'ess-r-mode-hook 'electric-pair-mode)
+;; (add-hook 'ess-r-mode-hook 'electric-pair-mode)
+(add-hook 'ess-r-mode-hook 'subword-mode) ; CamelCase aware editing
 (setq ess-indent-with-fancy-comments nil) ; prevent # weird identation
 (setq ess-default-style 'RStudio)
 (setq ess-use-company 'script-only)
@@ -555,13 +564,13 @@
 ;; 	  python-shell-interpreter-args "--simple-prompt -i")
 
 ;; elpy
-(elpy-enable)
+;; (elpy-enable)
 
 ;; removes bindings to Alt + arrows                                                                                  
-(define-key elpy-mode-map (kbd "<M-left>") nil)
-(define-key elpy-mode-map (kbd "<M-right>") nil)
-(define-key elpy-mode-map (kbd "<M-up>") nil)
-(define-key elpy-mode-map (kbd "<M-down>") nil)
+;; (define-key elpy-mode-map (kbd "<M-left>") nil)
+;; (define-key elpy-mode-map (kbd "<M-right>") nil)
+;; (define-key elpy-mode-map (kbd "<M-up>") nil)
+;; (define-key elpy-mode-map (kbd "<M-down>") nil)
 
 ;; to use IPython instead of usual python
 ;;      NOTE: --pylab        - import several things and allow inline graphs
@@ -573,10 +582,10 @@
 (defalias 'workon 'pyvenv-workon)
 
 ;; use jedi backend
-(setq elpy-rpc-backend "jedi")
+;; (setq elpy-rpc-backend "jedi")
 
-(eval-after-load 'company
-		  '(add-to-list 'company-backends 'company-jedi))
+;; (eval-after-load 'company
+;;		  '(add-to-list 'company-backends 'company-jedi))
 
 ;; disable flymake so it may use flycheck instead
 ;; (when (require 'flycheck nil t)
@@ -643,8 +652,10 @@ That is, a string used to represent it on the tab bar."
 ;; C-PgUp  ;;  C-PgDown
 (global-set-key [C-next] 'tabbar-forward-tab)
 (global-set-key [C-prior] 'tabbar-backward-tab)
-(global-set-key [C-S-home] 'tabbar-forward-group)
-(global-set-key [C-S-end] 'tabbar-backward-group)
+(global-set-key (kbd "M-]")  'tabbar-forward-tab)
+(global-set-key (kbd "M-[") 'tabbar-backward-tab)
+;; (global-set-key [C-S-home] 'tabbar-forward-group)
+;; (global-set-key [C-S-end] 'tabbar-backward-group)
 (global-set-key (kbd "C-c <right>") 'tabbar-forward-tab)
 (global-set-key (kbd "C-c <left>") 'tabbar-backward-tab)
 (global-set-key (kbd "C-c <up>") 'tabbar-forward-group)
@@ -741,16 +752,16 @@ That is, a string used to represent it on the tab bar."
 (global-set-key (kbd "C-c 0") 'reftex-reference)
 
 ;; estilo de citação ABNTEX
-(defun my-LaTeX-reftex-format ()
-  (setq reftex-cite-format
-		'((?\C-m . "\\cite[]{%l}")
-		  (?t . "\\citeonline[]{%l}")
-		  (?y . "\\citeyear[]{%l}")
-		  (?a . "\\citeauthoronline[]{%l}")
-		  (?f . "\\citeauthoronline{%l}, \\citeyear{%l}~\\cite{%l}")
-		  ))
-  )
-(add-hook 'LaTeX-mode-hook 'my-LaTeX-reftex-format)
+;; (defun my-LaTeX-reftex-format ()
+;;   (setq reftex-cite-format
+;; 		'((?\C-m . "\\cite[]{%l}")
+;; 		  (?t . "\\citeonline[]{%l}")
+;; 		  (?y . "\\citeyear[]{%l}")
+;; 		  (?a . "\\citeauthoronline[]{%l}")
+;; 		  (?f . "\\citeauthoronline{%l}, \\citeyear{%l}~\\cite{%l}")
+;; 		  ))
+;;   )
+;; (add-hook 'LaTeX-mode-hook 'my-LaTeX-reftex-format)
 
 
 ;; find bibfile of current visiting document
@@ -831,32 +842,47 @@ That is, a string used to represent it on the tab bar."
 (setq-default TeX-master nil)
 
 ;; adiciona line breaks no final apenas visualmente (não altera buffer)
-;; (add-hook 'LaTeX-mode-hook 'visual-line-mode)
+(add-hook 'LaTeX-mode-hook 'visual-line-mode)
 ;; (add-hook 'LaTeX-mode-hook 'visual-fill-column-mode)
 
-;; quebra linhas similarmente ao anterior, mas alterando o buffer (aplicar M-q)
-;; original: http://pleasefindattached.blogspot.com/2011/12/emacsauctex-sentence-fill-greatly.html
-(defadvice LaTeX-fill-region-as-paragraph (around LaTeX-sentence-filling)
-  "Start each sentence on a new line."
-  (let ((from (ad-get-arg 0))
-        (to-marker (set-marker (make-marker) (ad-get-arg 1)))
-		(fill-column 75)
-		;(fill-column 95)
-        tmp-end)
-    (while (< from (marker-position to-marker))
-      (forward-sentence)
-      ;; might have gone beyond to-marker --- use whichever is smaller:
-      (ad-set-arg 1 (setq tmp-end (min (point) (marker-position to-marker))))
-      ad-do-it
-      (ad-set-arg 0 (setq from (point)))
-      (unless (or
-               (bolp)
-	  		   (looking-back "^\\s *")
-               (looking-at "\\s *$"))
-        (LaTeX-newline))
-	  )
-    (set-marker to-marker nil)))
-(ad-activate 'LaTeX-fill-region-as-paragraph)
+;; Quebra linhas nos pontos
+;; original 1: http://pleasefindattached.blogspot.com/2011/12/emacsauctex-sentence-fill-greatly.html
+;; original 2: https://stackoverflow.com/a/9393798
+;; (defun auto-fill-by-sentences ()
+;;   (if (looking-back (sentence-end))
+;;       ;; Break at a sentence
+;;       (progn
+;;         (LaTeX-newline)
+;;         t)
+;;     ;; Fall back to the default
+;;     (do-auto-fill)))
+;; (add-hook 'LaTeX-mode-hook (lambda () (setq auto-fill-function 'auto-fill-by-sentences)))
+
+;; ;; Modified from http://pleasefindattached.blogspot.com/2011/12/emacsauctex-sentence-fill-greatly.html
+;; (defadvice LaTeX-fill-region-as-paragraph (around LaTeX-sentence-filling)
+;;   "Start each sentence on a new line."
+;;   (let ((from (ad-get-arg 0))
+;;         (to-marker (set-marker (make-marker) (ad-get-arg 1)))
+;;         tmp-end)
+;;     (while (< from (marker-position to-marker))
+;;       (forward-sentence)
+;;       ;; might have gone beyond to-marker---use whichever is smaller:
+;;       (ad-set-arg 1 (setq tmp-end (min (point) (marker-position to-marker))))
+;;       ad-do-it
+;;       (ad-set-arg 0 (setq from (point)))
+;;       (unless (or (looking-back "^\\s *")
+;;                   (looking-at "\\s *$"))
+;;         (LaTeX-newline)))
+;;     (set-marker to-marker nil)))
+;; (ad-activate 'LaTeX-fill-region-as-paragraph)
+
+;; my own!
+(defun fill-sentence(beginning end)
+  (interactive "r")
+  (unfill-paragraph)
+  (mark-paragraph)
+  (vr/replace "\\. " ".\n" beginning end))
+(define-key LaTeX-mode-map (kbd "C-q") 'fill-sentence)
 
 ;; latexdiff
 (require 'latexdiff)
@@ -998,7 +1024,7 @@ That is, a string used to represent it on the tab bar."
 (add-hook 'c-mode-common-hook 'fci-mode)
 
 ;; python
-(add-hook 'python-mode-hook 'fci-mode)
+;; (add-hook 'python-mode-hook 'fci-mode)
 
 ;; ------------------------------------------------------------------------
 ;; Atalhos do Flyspell

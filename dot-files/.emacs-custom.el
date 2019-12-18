@@ -124,6 +124,7 @@
    ["#2e3436" "#a40000" "#4e9a06" "#c4a000" "#204a87" "#5c3566" "#729fcf" "#eeeeec"])
  '(auto-completion-min-chars (quote (global . 3)))
  '(auto-hscroll-mode (quote current-line))
+ '(ccm-vpos-init 2)
  '(custom-enabled-themes (quote (zenburn)))
  '(custom-safe-themes
    (quote
@@ -166,9 +167,19 @@
  '(nrepl-message-colors
    (quote
     ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
+ '(org-emphasis-alist
+   (quote
+    (("*"
+      (:foreground "orange red"))
+     ("/" italic)
+     ("_" underline)
+     ("=" org-verbatim verbatim)
+     ("~" org-code verbatim)
+     ("+"
+      (:strike-through t)))))
  '(package-selected-packages
    (quote
-    (auto-complete-clang cmake-mode rtags cmake-ide ess-view ess-smart-underscore ess fic-mode powershell focus sed-mode see-mode fzf wc-mode visual-regexp-steroids visual-fill-column unfill sr-speedbar pythonic python-mode paradox multiple-cursors modeline-posn meghanada matlab-mode markdown-preview-mode markdown-preview-eww latexdiff latex-pretty-symbols json-mode hl-line+ google-translate google-this git-gutter-fringe gh-md ggtags flymd flycheck-irony erlang elpy ein desktop+ company-shell company-jedi company-irony-c-headers company-irony company-flx company-distel company-c-headers company-auctex bash-completion auctex-latexmk)))
+    (csv-mode magit edit-server centered-cursor-mode darkroom poly-R helm auto-complete-clang cmake-mode rtags cmake-ide ess-view ess-smart-underscore ess fic-mode powershell focus sed-mode see-mode fzf wc-mode visual-regexp-steroids visual-fill-column unfill sr-speedbar paradox multiple-cursors modeline-posn meghanada matlab-mode markdown-preview-mode markdown-preview-eww latexdiff latex-pretty-symbols json-mode hl-line+ google-translate google-this git-gutter-fringe gh-md ggtags flymd flycheck-irony erlang ein desktop+ company-shell company-irony-c-headers company-irony company-flx company-distel company-c-headers company-auctex bash-completion auctex-latexmk)))
  '(paradox-automatically-star t)
  '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
  '(reftex-cite-format
@@ -204,7 +215,7 @@
  '(vc-annotate-very-old-color "#DC8CC3")
  '(whitespace-style
    (quote
-    (face space-before-tab empty space-after-tab indentation face lines trailing))))
+    (face space-before-tab empty space-after-tab indentation::tab face trailing))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
