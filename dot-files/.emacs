@@ -238,7 +238,7 @@
 ;; search all buffers
 (global-set-key (kbd "C-S-s") 'multi-occur-in-matching-buffers)
 
-(global-set-key (kbd "C-t") 'comment-or-uncomment-region)
+(global-set-key (kbd "C-/") 'comment-or-uncomment-region)
 (global-set-key (kbd "C-c i") 'imenu)
 (global-set-key (kbd "C-c r") 'revert-buffer)
 
@@ -305,6 +305,11 @@
      (progn (forward-visible-line 1) (point)))))
 ;; (global-set-key (kbd "C-S-d") 'delete-char)
 (global-set-key (kbd "C-M-d") 'delete-current-line)
+
+;;-----------------------------------------------------
+;; restclient mode (HTTP requests testing file
+(add-to-list 'auto-mode-alist '("\\.http\\'" . restclient-mode))
+
 
 ;;-----------------------------------------------------
 ;;-----------------------------------------------------
@@ -444,6 +449,10 @@
 		))
              ))
 
+;;------------------------
+;; compilation options
+(setq compilation-scroll-output t)
+
 ;;-----------------------------------------------
 ;;     C/C++ mode configs minor-modes hooks    ;;
 
@@ -564,13 +573,13 @@
 ;; 	  python-shell-interpreter-args "--simple-prompt -i")
 
 ;; elpy
-;; (elpy-enable)
+(elpy-enable)
 
 ;; removes bindings to Alt + arrows                                                                                  
-;; (define-key elpy-mode-map (kbd "<M-left>") nil)
-;; (define-key elpy-mode-map (kbd "<M-right>") nil)
-;; (define-key elpy-mode-map (kbd "<M-up>") nil)
-;; (define-key elpy-mode-map (kbd "<M-down>") nil)
+(define-key elpy-mode-map (kbd "<M-left>") nil)
+(define-key elpy-mode-map (kbd "<M-right>") nil)
+(define-key elpy-mode-map (kbd "<M-up>") nil)
+(define-key elpy-mode-map (kbd "<M-down>") nil)
 
 ;; to use IPython instead of usual python
 ;;      NOTE: --pylab        - import several things and allow inline graphs
@@ -588,9 +597,9 @@
 ;;		  '(add-to-list 'company-backends 'company-jedi))
 
 ;; disable flymake so it may use flycheck instead
-;; (when (require 'flycheck nil t)
-;;  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-;;  (add-hook 'elpy-mode-hook 'flycheck-mode))
+(when (require 'flycheck nil t)
+ (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+ (add-hook 'elpy-mode-hook 'flycheck-mode))
 
 ;; -----------------------------------------------------------------------------
 ;;            tabbar-mode com Tweaks
@@ -1024,7 +1033,7 @@ That is, a string used to represent it on the tab bar."
 (add-hook 'c-mode-common-hook 'fci-mode)
 
 ;; python
-;; (add-hook 'python-mode-hook 'fci-mode)
+(add-hook 'python-mode-hook 'fci-mode)
 
 ;; ------------------------------------------------------------------------
 ;; Atalhos do Flyspell
@@ -1056,6 +1065,19 @@ That is, a string used to represent it on the tab bar."
 (require 'fic-mode)
 (add-hook 'c++-mode-hook 'fic-mode)
 (add-hook 'emacs-lisp-mode-hook 'fic-mode)
+
+;;-------------
+;; ORG MODE SETUP
+(defun my/modify-org-done-face ()
+  (setq org-fontify-done-headline t)
+  (set-face-attribute 'org-done nil :strike-through t)
+  (set-face-attribute 'org-headline-done nil
+                      :strike-through t
+                      :foreground "light gray"))
+
+(eval-after-load "org"
+  (add-hook 'org-add-hook 'my/modify-org-done-face))
+
 
 ;; -----------------------------------------------------------------------------
 ;; Centralizar arquivos temporários

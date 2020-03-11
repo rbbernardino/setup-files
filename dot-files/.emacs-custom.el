@@ -179,7 +179,7 @@
       (:strike-through t)))))
  '(package-selected-packages
    (quote
-    (csv-mode magit edit-server centered-cursor-mode darkroom poly-R helm auto-complete-clang cmake-mode rtags cmake-ide ess-view ess-smart-underscore ess fic-mode powershell focus sed-mode see-mode fzf wc-mode visual-regexp-steroids visual-fill-column unfill sr-speedbar paradox multiple-cursors modeline-posn meghanada matlab-mode markdown-preview-mode markdown-preview-eww latexdiff latex-pretty-symbols json-mode hl-line+ google-translate google-this git-gutter-fringe gh-md ggtags flymd flycheck-irony erlang ein desktop+ company-shell company-irony-c-headers company-irony company-flx company-distel company-c-headers company-auctex bash-completion auctex-latexmk)))
+    (restclient csv-mode magit edit-server centered-cursor-mode darkroom poly-R helm auto-complete-clang cmake-mode rtags cmake-ide ess-view ess-smart-underscore ess fic-mode powershell focus sed-mode see-mode fzf wc-mode visual-regexp-steroids visual-fill-column unfill sr-speedbar paradox multiple-cursors modeline-posn meghanada matlab-mode markdown-preview-mode markdown-preview-eww latexdiff latex-pretty-symbols json-mode hl-line+ google-translate google-this git-gutter-fringe gh-md ggtags flymd flycheck-irony erlang ein desktop+ company-shell company-irony-c-headers company-irony company-flx company-distel company-c-headers company-auctex bash-completion auctex-latexmk)))
  '(paradox-automatically-star t)
  '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
  '(reftex-cite-format
@@ -189,6 +189,9 @@
      (121 . "\\citeyear[]{%l}")
      (97 . "\\citeauthoronline[]{%l}"))))
  '(reftex-plug-into-AUCTeX t)
+ '(safe-local-variable-values
+   (quote
+    ((reftex-default-bibliography . /home/rodrigo/\.texmf/bibtex/bib/mendeley/library\.bib))))
  '(tabbar-separator (quote (0.3)))
  '(tool-bar-mode nil)
  '(vc-annotate-background "#2B2B2B")
