@@ -130,6 +130,7 @@
    (quote
     ("65533f61159a00d88537d301747d4134116532c44cea994e5ba5f04bbfe5405c" default)))
  '(elpy-rpc-backend nil t)
+ '(elpy-rpc-virtualenv-path (quote current))
  '(ess-R-font-lock-keywords
    (quote
     ((ess-R-fl-keyword:keywords . t)
@@ -146,6 +147,8 @@
      (ess-R-fl-keyword:F&T . t))))
  '(fci-rule-color "#383838")
  '(fill-column 80)
+ '(find-ls-option (quote ("-exec ls -ldh {} +" . "-ldh")))
+ '(indent-tabs-mode nil)
  '(inferior-ess-r-font-lock-keywords
    (quote
     ((ess-S-fl-keyword:prompt . t)
@@ -164,6 +167,8 @@
      (ess-R-fl-keyword:F&T . t))))
  '(inhibit-startup-screen t)
  '(ispell-personal-dictionary nil)
+ '(js-indent-level 2)
+ '(jupyter-repl-echo-eval-p t)
  '(nrepl-message-colors
    (quote
     ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
@@ -177,9 +182,10 @@
      ("~" org-code verbatim)
      ("+"
       (:strike-through t)))))
+ '(org-list-allow-alphabetical t)
  '(package-selected-packages
    (quote
-    (restclient csv-mode magit edit-server centered-cursor-mode darkroom poly-R helm auto-complete-clang cmake-mode rtags cmake-ide ess-view ess-smart-underscore ess fic-mode powershell focus sed-mode see-mode fzf wc-mode visual-regexp-steroids visual-fill-column unfill sr-speedbar paradox multiple-cursors modeline-posn meghanada matlab-mode markdown-preview-mode markdown-preview-eww latexdiff latex-pretty-symbols json-mode hl-line+ google-translate google-this git-gutter-fringe gh-md ggtags flymd flycheck-irony erlang ein desktop+ company-shell company-irony-c-headers company-irony company-flx company-distel company-c-headers company-auctex bash-completion auctex-latexmk)))
+    (tide jupyter pipenv org-starter ibuffer-sidebar vscode-icon dired-sidebar all-the-icons-dired prettier-js indium js2-mode company-fuzzy restclient csv-mode magit edit-server centered-cursor-mode darkroom poly-R helm auto-complete-clang cmake-mode rtags cmake-ide ess-view ess-smart-underscore ess fic-mode powershell focus sed-mode see-mode fzf wc-mode visual-regexp-steroids visual-fill-column unfill sr-speedbar paradox multiple-cursors modeline-posn meghanada matlab-mode markdown-preview-mode markdown-preview-eww latexdiff latex-pretty-symbols json-mode hl-line+ google-translate google-this git-gutter-fringe gh-md ggtags flymd flycheck-irony erlang ein desktop+ company-shell company-irony-c-headers company-irony company-flx company-distel company-c-headers company-auctex bash-completion auctex-latexmk)))
  '(paradox-automatically-star t)
  '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
  '(reftex-cite-format
@@ -192,6 +198,7 @@
  '(safe-local-variable-values
    (quote
     ((reftex-default-bibliography . /home/rodrigo/\.texmf/bibtex/bib/mendeley/library\.bib))))
+ '(tab-width 4)
  '(tabbar-separator (quote (0.3)))
  '(tool-bar-mode nil)
  '(vc-annotate-background "#2B2B2B")

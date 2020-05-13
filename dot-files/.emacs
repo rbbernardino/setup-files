@@ -25,6 +25,34 @@
             ;; Set dired-x buffer-local variables here.  For example:
             ;; (dired-omit-mode 1)
             ))
+;; (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+(add-hook 'dired-sidebar-mode-hook
+          (lambda ()
+            (unless (file-remote-p default-directory)
+              (auto-revert-mode))))
+
+;; icons to dired mode
+;; (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+
+;(push 'toggle-window-split dired-sidebar-toggle-hidden-commands)
+;(push 'rotate-windows dired-sidebar-toggle-hidden-commands)
+(setq dired-sidebar-subtree-line-prefix "__")
+(setq dired-sidebar-theme 'vscode)
+(setq dired-sidebar-use-term-integration t)
+(setq dired-sidebar-use-custom-font t)
+
+;; ibuffer sidebar
+;; (setq ibuffer-sidebar-use-custom-font t)
+;; (setq ibuffer-sidebar-face `(:family "Helvetica" :height 40))
+(defun sidebar-toggle ()
+  "Toggle both `dired-sidebar' and `ibuffer-sidebar'."
+  (interactive)
+  (dired-sidebar-toggle-sidebar)
+  (ibuffer-sidebar-toggle-sidebar))
+;; -----------
+;; (global-set-key (kbd "C-x C-n") 'dired-sidebar-toggle-sidebar)
+(global-set-key (kbd "C-x C-n") 'sidebar-toggle)
+;; -----------
 
 ;; contagem de palavras e caracteres
 (require 'wc-mode)
@@ -124,25 +152,25 @@
 ;; (require 'misc)
 
 ;;  Trocar identação por espaços para por tabs
-(defun setar-identacao-tab()
-	"Set to indent with TABS instead of spaces"
-	(setq indent-tabs-mode t)
-	(setq-default indent-tabs-mode t)
+;; (defun setar-identacao-tab()
+;; 	"Set to indent with TABS instead of spaces"
+;; 	(setq indent-tabs-mode t)
+;; 	(setq-default indent-tabs-mode t)
 
-	;; Bind the TAB key
-	(local-set-key (kbd "TAB") 'self-insert-command)
-)
+;; 	;; Bind the TAB key
+;; 	(local-set-key (kbd "TAB") 'self-insert-command)
+;; )
 
 ;; Garantir identação por espaços
-(defun ident-with-spaces()
-  (setq indent-tabs-mode nil)
-  )
+;; (defun ident-with-spaces()
+;;   (setq indent-tabs-mode nil)
+;;   )
 
 ;(add-hook 'erlang-mode-hook 'setar-identacao-tab)
-(add-hook 'fundamental-mode-hook 'ident-with-spaces)
-(add-hook 'markdown-mode-hook 'ident-with-spaces)
+;; (add-hook 'fundamental-mode-hook 'ident-with-spaces)
+;; (add-hook 'markdown-mode-hook 'ident-with-spaces)
 ;; (add-hook 'ess-r-mode-hook 'ident-with-spaces)
-(add-hook 'c++-mode 'ident-with-spaces())
+;; (add-hook 'c++-mode 'ident-with-spaces())
 
 ;; largura do TAB
 (setq default-tab-width 4)
@@ -176,6 +204,42 @@
 	  (activate-mark))))
 (global-set-key (kbd "M-s") 'my-mark-current-word)
 
+;;--------------------
+;; javascript improved mode
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+(add-hook 'js2-mode-hook 'prettify-symbols-mode)
+(add-hook 'js2-mode-hook 'prettier-js-mode)
+(add-hook 'web-mode-hook 'prettier-js-mode)
+(add-hook 'web-mode-hook 'prettify-symbols-mode)
+(add-hook 'js2-mode-hook (lambda() (setq js2-basic-offset 2)))
+(add-hook 'web-mode-hook (lambda() (setq js2-basic-offset 2)))
+(setq prettier-js-args '(
+  "--trailing-comma" "all"
+  "--bracket-spacing" "false"
+))
+(add-hook 'js2-mode-hook #'indium-interaction-mode)
+
+;;----------------------------
+;; TYPE SCRIPT
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode +1)
+  (tide-hl-identifier-mode +1)
+  ;; company is an optional dependency. You have to
+  ;; install it separately via package-install
+  ;; `M-x package-install [ret] company`
+  (company-mode +1))
+
+;; aligns annotation to the right hand side
+(setq company-tooltip-align-annotations t)
+
+;; formats the buffer before saving
+(add-hook 'before-save-hook 'tide-format-before-save)
+
+(add-hook 'typescript-mode-hook #'setup-tide-mode)
 
 ;;-----------------------------------------------------
 ;;           GIT
@@ -344,7 +408,7 @@
 ;; menu de arquivos recentes (em lista)
 (require 'recentf)
 (recentf-mode 1)
-(setq recentf-max-menu-items 25)
+(setq recentf-max-menu-items 50)
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
 ;; configurando prompt do octave
@@ -381,6 +445,22 @@
 ;;  company-etags-ignore-case t
 ;;  ggtags-global-ignore-case t)
 ;; (setq completion-ignore-case t)
+
+;; fuzzy matching
+;; (global-company-fuzzy-mode 1)
+;; (use-package company
+;;   :init
+;;   (setq company-require-match nil)            ; Don't require match, so you can still move your cursor as expected.
+;;   (setq company-tooltip-align-annotations t)  ; Align annotation to the right side.
+;;   (setq company-eclim-auto-save nil)          ; Stop eclim auto save.
+;;   (setq company-dabbrev-downcase nil)         ; No downcase when completion.
+;;   :config
+;;   ;; Enable downcase only when completing the completion.
+;;   (defun jcs--company-complete-selection--advice-around (fn)
+;;     "Advice execute around `company-complete-selection' command."
+;;     (let ((company-dabbrev-downcase t))
+;;       (call-interactively fn)))
+;;   (advice-add 'company-complete-selection :around #'jcs--company-complete-selection--advice-around))
 
 ;;-----------------------------------------------
 ;;-----------------------------------------------
@@ -600,6 +680,9 @@
 (when (require 'flycheck nil t)
  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
  (add-hook 'elpy-mode-hook 'flycheck-mode))
+
+;; set tab width
+(add-hook 'python-mode-hook (lambda() (setq tab-width 4)))
 
 ;; -----------------------------------------------------------------------------
 ;;            tabbar-mode com Tweaks
@@ -1078,6 +1161,7 @@ That is, a string used to represent it on the tab bar."
 (eval-after-load "org"
   (add-hook 'org-add-hook 'my/modify-org-done-face))
 
+(setq org-agenda-files '("~/org"))
 
 ;; -----------------------------------------------------------------------------
 ;; Centralizar arquivos temporários
