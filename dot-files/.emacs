@@ -12,6 +12,10 @@
 
 (package-initialize)
 
+;; -----------------------------------------------------------
+(use-package company-tabnine :ensure t)
+(add-to-list 'company-backends #'company-tabnine)
+
 ;; dired extra tools, use <C-x d> to invoke dired to load this
 (add-hook 'dired-load-hook
           (lambda ()
@@ -53,6 +57,10 @@
 ;; (global-set-key (kbd "C-x C-n") 'dired-sidebar-toggle-sidebar)
 (global-set-key (kbd "C-x C-n") 'sidebar-toggle)
 ;; -----------
+
+;; removes weird lag when scrolling
+;; https://emacs.stackexchange.com/a/28746
+(setq auto-window-vscroll nil)
 
 ;; contagem de palavras e caracteres
 (require 'wc-mode)
@@ -231,7 +239,8 @@
   ;; company is an optional dependency. You have to
   ;; install it separately via package-install
   ;; `M-x package-install [ret] company`
-  (company-mode +1))
+  (company-mode +1)
+  (setq typescript-indent-level 2))
 
 ;; aligns annotation to the right hand side
 (setq company-tooltip-align-annotations t)
@@ -336,7 +345,7 @@
 ;; find file
 (global-set-key (kbd "M-S-.") 'find-file-at-point)
 
-(line-number-mode 1)
+;; (line-number-mode 1)
 (column-number-mode 1)
 (show-paren-mode 1)
 
@@ -427,8 +436,11 @@
 ;; configurar melhor depois para aceitar letras minúsculas
 (setq company-show-numbers          t
 	  ;; company-dabbrev-downcase      "case-replace"
-	  ;;company-idle-delay            0
-	  ;; company-minimum-prefix-length		2
+
+      ;; delay 0 para melhor suporte à tabnine
+	  ;; company-idle-delay            0.2
+
+      ;; company-minimum-prefix-length		2
 	  )
 
 (with-eval-after-load 'company
@@ -490,6 +502,10 @@
 ;; camel case
 (add-hook 'java-mode-hook 'subword-mode)
 (add-hook 'c-mode-common-hook 'subword-mode)
+
+;;------------------------------------------
+;; KOTLIN
+(add-hook 'kotlin-mode-hook 'flycheck-mode)
 
 ;;-----------------------------------------------
 ;; Java
@@ -777,6 +793,10 @@ That is, a string used to represent it on the tab bar."
 ;; command to open file at point
 (add-hook 'LaTeX-mode-hook
 		  'local-set-key (kbd "M-.") 'find-file-at-point)
+
+;; makes "C-c C-o C-b" to "fold" or pretty format/render severl items
+;; unfold with "C-c C-o b"
+(add-hook `LaTeX-mode `TeX-fold-mode)
 
 ;;------------------------------------------------
 ;; CORRIGE BUG do includegraphics...
@@ -1116,7 +1136,7 @@ That is, a string used to represent it on the tab bar."
 (add-hook 'c-mode-common-hook 'fci-mode)
 
 ;; python
-(add-hook 'python-mode-hook 'fci-mode)
+;; (add-hook 'python-mode-hook 'fci-mode)
 
 ;; ------------------------------------------------------------------------
 ;; Atalhos do Flyspell
@@ -1162,6 +1182,35 @@ That is, a string used to represent it on the tab bar."
   (add-hook 'org-add-hook 'my/modify-org-done-face))
 
 (setq org-agenda-files '("~/org"))
+
+;; better setup to export to LaTeX
+;; abstract comes before summary
+;; (defun org-export-latex-no-toc (depth)
+;;     (when depth
+;;       (format "%% Org-mode is exporting headings to %s levels.\n"
+;;               depth)))
+;; (setq org-export-latex-format-toc-function 'org-export-latex-no-toc)
+
+;; -----------------------------------------------------------------------------
+;; ORG-REF
+;; (setq reftex-default-bibliography '("~/Dropbox/docs/computer/config_files/jabref-maindir/jabref-lib.bib"))
+(setq reftex-default-bibliography '("~/.texmf/bibtex/bib/mendeley/library.bib"))
+
+(setq
+ ;; bibtex-completion-bibliography "~/Dropbox/docs/computer/config_files/jabref-maindir/jabref-lib.bib")
+ bibtex-completion-bibliography "~/.texmf/bibtex/bib/mendeley/library.bib")
+;;  bibtex-completion-library-path "/home/rodrigo/.docs_hidden/Mendeley_Desktop")
+;;  ;bibtex-completion-notes-path "~/Dropbox/bibliography/helm-bibtex-notes")
+
+(setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
+
+;; ;; open pdf with system pdf viewer (works on mac)
+;; (setq bibtex-completion-pdf-open-function
+;;   (lambda (fpath)
+;;     (start-process "open" "*open*" "open" fpath)))
+
+;; alternative
+;; (setq bibtex-completion-pdf-open-function 'org-open-file)
 
 ;; -----------------------------------------------------------------------------
 ;; Centralizar arquivos temporários

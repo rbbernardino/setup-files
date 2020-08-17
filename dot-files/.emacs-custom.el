@@ -129,6 +129,7 @@
  '(custom-safe-themes
    (quote
     ("65533f61159a00d88537d301747d4134116532c44cea994e5ba5f04bbfe5405c" default)))
+ '(darkroom-margins 0.06)
  '(elpy-rpc-backend nil t)
  '(elpy-rpc-virtualenv-path (quote current))
  '(ess-R-font-lock-keywords
@@ -172,6 +173,9 @@
  '(nrepl-message-colors
    (quote
     ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
+ '(org-agenda-files
+   (quote
+    ("/home/rodrigo/org/acropole.org" "/home/rodrigo/org/aulas_cin.org" "/home/rodrigo/org/brainy.org" "/home/rodrigo/org/computer.org" "/home/rodrigo/org/estudo-acropole.org" "/home/rodrigo/org/familia.org" "/home/rodrigo/org/journaling.org" "/home/rodrigo/org/lista-de-compras.org" "/home/rodrigo/org/misc.org" "/home/rodrigo/org/mypay.org" "/home/rodrigo/org/pesquisa_main.org" "/home/rodrigo/org/pesquisa_reviews.org" "/home/rodrigo/org/temp.org" "/home/rodrigo/org/ufpe_cadeiras.org")) t)
  '(org-emphasis-alist
    (quote
     (("*"
@@ -185,7 +189,7 @@
  '(org-list-allow-alphabetical t)
  '(package-selected-packages
    (quote
-    (tide jupyter pipenv org-starter ibuffer-sidebar vscode-icon dired-sidebar all-the-icons-dired prettier-js indium js2-mode company-fuzzy restclient csv-mode magit edit-server centered-cursor-mode darkroom poly-R helm auto-complete-clang cmake-mode rtags cmake-ide ess-view ess-smart-underscore ess fic-mode powershell focus sed-mode see-mode fzf wc-mode visual-regexp-steroids visual-fill-column unfill sr-speedbar paradox multiple-cursors modeline-posn meghanada matlab-mode markdown-preview-mode markdown-preview-eww latexdiff latex-pretty-symbols json-mode hl-line+ google-translate google-this git-gutter-fringe gh-md ggtags flymd flycheck-irony erlang ein desktop+ company-shell company-irony-c-headers company-irony company-flx company-distel company-c-headers company-auctex bash-completion auctex-latexmk)))
+    (dockerfile-mode docker use-package kotlin-mode flycheck-kotlin org-ref go-mode tide jupyter pipenv org-starter ibuffer-sidebar vscode-icon dired-sidebar all-the-icons-dired prettier-js indium js2-mode company-fuzzy restclient csv-mode magit edit-server centered-cursor-mode darkroom poly-R helm auto-complete-clang cmake-mode rtags cmake-ide ess-view ess-smart-underscore ess fic-mode powershell focus sed-mode see-mode fzf wc-mode visual-regexp-steroids visual-fill-column unfill sr-speedbar paradox multiple-cursors modeline-posn meghanada matlab-mode markdown-preview-mode markdown-preview-eww latexdiff latex-pretty-symbols json-mode hl-line+ google-translate google-this git-gutter-fringe gh-md ggtags flymd flycheck-irony erlang ein desktop+ company-shell company-irony-c-headers company-irony company-flx company-distel company-c-headers company-auctex bash-completion auctex-latexmk)))
  '(paradox-automatically-star t)
  '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
  '(reftex-cite-format
