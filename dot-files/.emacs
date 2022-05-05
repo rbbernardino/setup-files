@@ -13,8 +13,8 @@
 (package-initialize)
 
 ;; -----------------------------------------------------------
-(use-package company-tabnine :ensure t)
-(add-to-list 'company-backends #'company-tabnine)
+;; (use-package company-tabnine :ensure t)
+;; (add-to-list 'company-backends #'company-tabnine)
 
 ;; dired extra tools, use <C-x d> to invoke dired to load this
 (add-hook 'dired-load-hook
